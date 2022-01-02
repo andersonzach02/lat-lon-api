@@ -35,39 +35,44 @@ class HTMLParser {
         });
     });
 
-    const rowObjects = [];
+    let rowObjects = [];
 
-    rowInfo
+    rowObjects = rowInfo
       .filter((v) => v.length !== 0)
-      .forEach(
+      .map(
         (rowData) => {
           if (columnHeaders.length === 0) {
-            rowObjects.push(
-              rowData.reduce(
-                (previous, current, index) => ({
-                  ...previous,
-                  [index + 1]: current,
-                }),
-                {}
-              )
-            );
-          } else {
-            rowObjects.push(
-              rowData.reduce(
-                (previous, current, index) => ({
-                  ...previous,
-                  [columnHeaders[index]]: current,
-                }),
-                {}
-              )
-            );
+            return this.convertHeaderlessTableDatatoObject(rowData);
           }
+          return this.convertTableWithHeadertoObject(rowData, columnHeaders);
         }
 
         // eslint-disable-next-line function-paren-newline
       );
     /* eslint-enable prefer-arrow-callback, implicit-arrow-linebreak, func-names */
     return rowObjects;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  convertTableWithHeadertoObject(rowData, columnHeaders) {
+    return rowData.reduce(
+      (previous, current, index) => ({
+        ...previous,
+        [columnHeaders[index]]: current,
+      }),
+      {}
+    );
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  convertHeaderlessTableDatatoObject(rowData) {
+    return rowData.reduce(
+      (previous, current, index) => ({
+        ...previous,
+        [index + 1]: current,
+      }),
+      {}
+    );
   }
 }
 
