@@ -61,32 +61,63 @@ describe('HTMLParser getElement tests', () => {
 });
 
 describe('HTMLParser parseTabletoJSON tests', () => {
-  test('parseTabletoJSON should take a table with a single cell and convert the data in that row to a JSON object where the key is the column number', () => {
+  test('parseTabletoJSON should take a table with a single cell and return a single JSON object in an array where the key for the object is the column number', () => {
     const parser = new HTMLParser(
       // eslint-disable-next-line comma-dangle
-      '<table><tbody><tr><td>Row 1</td></tr></tbody></table>'
+      '<table><tbody><tr><td>Row 1 Column 1</td></tr></tbody></table>'
     );
 
     const tableBody = parser.getElement('table');
 
     const tableData = parser.parseTabletoJSON(tableBody);
 
-    expect(tableData).toStrictEqual({ 1: 'Row 1' });
+    expect(tableData).toStrictEqual([{ 1: 'Row 1 Column 1' }]);
   });
 
-  test('parseTabletoJSON should take a table with multiple columns in a single row and covert the data to a JSON where the key is the column number', () => {
+  test('parseTabletoJSON should take a table with multiple columns in a single row and return a single JSON object in an array where the key is the column number', () => {
     const parser = new HTMLParser(
       // eslint-disable-next-line comma-dangle
-      '<table><tbody><tr><td>Row 1</td><td>Row 2</td></tr></tbody></table>'
+      '<table><tbody><tr><td>Row 1 Column 1</td><td>Row 1 Column 2</td></tr></tbody></table>'
     );
 
     const tableBody = parser.getElement('table');
 
     const tableData = parser.parseTabletoJSON(tableBody);
 
-    expect(tableData).toStrictEqual({ 1: 'Row 1', 2: 'Row 2' });
+    expect(tableData).toStrictEqual([
+      { 1: 'Row 1 Column 1', 2: 'Row 1 Column 2' },
+    ]);
   });
 
-  // eslint-disable-next-line max-len
-  // also want table with multiple rows to return an array of objects, maybe the single row should be an array too with a single object
+  test('parseTabletoJson should take a table with multiple rows and create multiple objects with the value of the columns with keys as the column numbers in an array', () => {
+    const parser = new HTMLParser(
+      // eslint-disable-next-line comma-dangle
+      '<table><tbody><tr><td>Row 1 Column 1</td><td>Row 1 Column 2</td></tr><tr><td>Row 2 Column 1</td><td>Row 2 Column 2</td></tr></tbody></table>'
+    );
+
+    const tableBody = parser.getElement('table');
+
+    const tableData = parser.parseTabletoJSON(tableBody);
+
+    expect(tableData).toStrictEqual([
+      { 1: 'Row 1 Column 1', 2: 'Row 1 Column 2' },
+      { 1: 'Row 2 Column 1', 2: 'Row 2 Column 2' },
+    ]);
+  });
+
+  test('parseTabletoJSON should return an array of objects representing the table data with object field keys set to column headers if they are present', () => {
+    const parser = new HTMLParser(
+      // eslint-disable-next-line comma-dangle
+      '<table><tbody><tr><th>Column 1</th><th>Column 2</th></tr><tr><td>Row 1 Column 1</td><td>Row 1 Column 2</td></tr><tr><td>Row 2 Column 1</td><td>Row 2 Column 2</td></tr></tbody></table>'
+    );
+
+    const tableBody = parser.getElement('table');
+
+    const tableData = parser.parseTabletoJSON(tableBody);
+
+    expect(tableData).toStrictEqual([
+      { 'Column 1': 'Row 1 Column 1', 'Column 2': 'Row 1 Column 2' },
+      { 'Column 1': 'Row 2 Column 1', 'Column 2': 'Row 2 Column 2' },
+    ]);
+  });
 });

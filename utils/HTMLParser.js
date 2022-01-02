@@ -1,3 +1,5 @@
+/* eslint-disable comma-dangle */
+
 const cheerio = require('cheerio');
 
 class HTMLParser {
@@ -15,19 +17,57 @@ class HTMLParser {
 
     const rowInfo = [];
 
+    const columnHeaders = [];
+
     // eslint-disable-next-line func-names
-    table('td').each(function (i) {
-      rowInfo[i] = table(this).text();
+    table('th').each(function (i) {
+      columnHeaders[i] = table(this).text();
     });
 
-    return rowInfo.reduce(
-      (previous, current, index) => ({
-        ...previous,
-        [index + 1]: current,
-      }),
-      // eslint-disable-next-line comma-dangle
-      {}
-    );
+    /* eslint-disable prefer-arrow-callback, implicit-arrow-linebreak, func-names */
+    table('tr').each(function (i, elem) {
+      rowInfo[i] = [];
+
+      table(elem)
+        .find('td')
+        .each(function (j) {
+          rowInfo[i][j] = table(this).text();
+        });
+    });
+
+    const rowObjects = [];
+
+    rowInfo
+      .filter((v) => v.length !== 0)
+      .forEach(
+        (rowData) => {
+          if (columnHeaders.length === 0) {
+            rowObjects.push(
+              rowData.reduce(
+                (previous, current, index) => ({
+                  ...previous,
+                  [index + 1]: current,
+                }),
+                {}
+              )
+            );
+          } else {
+            rowObjects.push(
+              rowData.reduce(
+                (previous, current, index) => ({
+                  ...previous,
+                  [columnHeaders[index]]: current,
+                }),
+                {}
+              )
+            );
+          }
+        }
+
+        // eslint-disable-next-line function-paren-newline
+      );
+    /* eslint-enable prefer-arrow-callback, implicit-arrow-linebreak, func-names */
+    return rowObjects;
   }
 }
 
