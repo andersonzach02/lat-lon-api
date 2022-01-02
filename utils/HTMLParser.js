@@ -15,20 +15,19 @@ class HTMLParser {
 
     const rowInfo = [];
 
-    table('td').each((i) => {
+    // eslint-disable-next-line func-names
+    table('td').each(function (i) {
       rowInfo[i] = table(this).text();
     });
 
-    console.log(rowInfo);
-
-    return rowInfo.map(
-      (previous, colInfo, index) => ({ ...previous, [index]: colInfo }),
+    return rowInfo.reduce(
+      (previous, current, index) => ({
+        ...previous,
+        [index + 1]: current,
+      }),
+      // eslint-disable-next-line comma-dangle
       {}
     );
-
-    // return {
-    //   1: rowInfo,
-    // };
   }
 }
 
