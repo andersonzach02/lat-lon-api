@@ -42,9 +42,9 @@ class HTMLParser {
       .map(
         (rowData) => {
           if (columnHeaders.length === 0) {
-            return this.convertHeaderlessTableDatatoObject(rowData);
+            return this.convertTableToObject(rowData);
           }
-          return this.convertTableWithHeadertoObject(rowData, columnHeaders);
+          return this.convertTableToObject(rowData, columnHeaders);
         }
 
         // eslint-disable-next-line function-paren-newline
@@ -54,22 +54,11 @@ class HTMLParser {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  convertTableWithHeadertoObject(rowData, columnHeaders) {
+  convertTableToObject(rowData, columnHeaders) {
     return rowData.reduce(
       (previous, current, index) => ({
         ...previous,
-        [columnHeaders[index]]: current,
-      }),
-      {}
-    );
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  convertHeaderlessTableDatatoObject(rowData) {
-    return rowData.reduce(
-      (previous, current, index) => ({
-        ...previous,
-        [index + 1]: current,
+        [columnHeaders ? columnHeaders[index] : [index + 1]]: current,
       }),
       {}
     );
