@@ -120,4 +120,34 @@ describe('HTMLParser parseTabletoJSON tests', () => {
       { 'Column 1': 'Row 2 Column 1', 'Column 2': 'Row 2 Column 2' },
     ]);
   });
+
+  test('parseTabletoJSON in an empty table should return an empty object', () => {
+    const parser = new HTMLParser('<table></table>');
+
+    const tableBody = parser.getElement('table');
+
+    const tableData = parser.parseTabletoJSON(tableBody);
+
+    expect(tableData).toStrictEqual({});
+  });
+
+  test('parseTabletoJSON with an empty parser should return an empty object', () => {
+    const parser = new HTMLParser('');
+
+    const tableBody = parser.getElement('table');
+
+    const tableData = parser.parseTabletoJSON(tableBody);
+
+    expect(tableData).toStrictEqual({});
+  });
+
+  test('parseTabletoJSON with an empty tbody should return an empty object', () => {
+    const parser = new HTMLParser('<table><tbody></tbody></table>');
+
+    const tableBody = parser.getElement('table');
+
+    const tableData = parser.parseTabletoJSON(tableBody);
+
+    expect(tableData).toStrictEqual({});
+  });
 });

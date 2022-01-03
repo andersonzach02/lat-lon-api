@@ -14,41 +14,48 @@ class HTMLParser {
   // eslint-disable-next-line class-methods-use-this
   parseTabletoJSON(tableBody) {
     const table = cheerio.load(tableBody, null, false);
+    const rowInfo = this.#getRowInfo(table);
 
-    const rowInfo = [];
+    if (!rowInfo) return {};
 
-    const columnHeaders = this.getColumnHeaders(table);
+    const columnHeaders = this.#getColumnHeaders(table);
 
-    /* eslint-disable prefer-arrow-callback, implicit-arrow-linebreak, func-names */
-    table('tr').each(function (i, elem) {
-      rowInfo[i] = [];
-
-      table(elem)
-        .find('td')
-        .each(function (j) {
-          rowInfo[i][j] = table(this).text();
-        });
-    });
-
-    let rowObjects = [];
-
-    rowObjects = rowInfo
+    const rowObjects = rowInfo
       .filter((v) => v.length !== 0)
       .map(
         (rowData) => {
-          if (!columnHeaders) return this.convertTableToObject(rowData);
+          if (!columnHeaders) return this.#convertTableToObject(rowData);
 
-          return this.convertTableToObject(rowData, columnHeaders);
+          return this.#convertTableToObject(rowData, columnHeaders);
         }
 
         // eslint-disable-next-line function-paren-newline
       );
     /* eslint-enable prefer-arrow-callback, implicit-arrow-linebreak, func-names */
+
     return rowObjects;
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getColumnHeaders(table) {
+  #getRowInfo(table) {
+    const rowInfo = [];
+
+    /* eslint-disable prefer-arrow-callback, implicit-arrow-linebreak, func-names */
+    table('tr').each(function (i, elem) {
+      rowInfo.push([]);
+
+      table(elem)
+        .find('td')
+        .each(function () {
+          rowInfo[i].push(table(this).text());
+        });
+    });
+
+    return rowInfo.filter((v) => v).length === 0 ? null : rowInfo;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  #getColumnHeaders(table) {
     const columnHeaders = [];
 
     // eslint-disable-next-line func-names
@@ -60,7 +67,7 @@ class HTMLParser {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  convertTableToObject(rowData, columnHeaders) {
+  #convertTableToObject(rowData, columnHeaders) {
     return rowData.reduce(
       (previous, current, index) => ({
         ...previous,
