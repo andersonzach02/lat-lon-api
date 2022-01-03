@@ -1,4 +1,4 @@
-const HTMLParser = require('../utils/HTMLParser');
+const HTMLParser = require('../../utils/HTMLParser');
 
 /* eslint-disable no-undef */
 describe('HTMLParser getElement tests', () => {

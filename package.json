@@ -1,43 +1,45 @@
 {
-	"name": "lat-lon-api",
-	"version": "1.0.0",
-	"description": "This is a template for an express api that I can use to create basic express apps in the future rather than starting from scratch.",
-	"main": "index.js",
-	"jest": {
-		"verbose": true
-	},
-	"scripts": {
-		"start": "node src/index.js",
-		"dev": "nodemon src/index.js",
-		"test": "jest",
-		"lint": "eslint --fix src test utils"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/andersonzach02/lat-lon-api.git"
-	},
-	"author": "Zach Anderson",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/andersonzach02/lat-lon-api/issues"
-	},
-	"homepage": "https://github.com/andersonzach02/lat-lon-api#readme",
-	"dependencies": {
-		"axios": "^0.24.0",
-		"cheerio": "^1.0.0-rc.10",
-		"cors": "^2.8.5",
-		"dotenv": "^10.0.0",
-		"express": "^4.17.1",
-		"helmet": "^4.6.0",
-		"morgan": "^1.10.0",
-		"winston": "^3.3.3"
-	},
-	"devDependencies": {
-		"eslint": "^8.3.0",
-		"eslint-config-airbnb-base": "^15.0.0",
-		"eslint-plugin-import": "^2.25.3",
-		"jest": "^27.3.1",
-		"nodemon": "^2.0.15",
-		"supertest": "^6.1.6"
-	}
+  "name": "lat-lon-api",
+  "version": "1.0.0",
+  "description": "This is a template for an express api that I can use to create basic express apps in the future rather than starting from scratch.",
+  "main": "index.js",
+  "jest": {
+    "verbose": true
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "jest",
+	"unit": "jest Unit",
+	"integration": "jest Integration",
+    "lint": "eslint --fix src test utils"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andersonzach02/lat-lon-api.git"
+  },
+  "author": "Zach Anderson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andersonzach02/lat-lon-api/issues"
+  },
+  "homepage": "https://github.com/andersonzach02/lat-lon-api#readme",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "cheerio": "^1.0.0-rc.10",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "helmet": "^4.6.0",
+    "morgan": "^1.10.0",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.3.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.1.6"
+  }
 }

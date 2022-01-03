@@ -17,12 +17,7 @@ class HTMLParser {
 
     const rowInfo = [];
 
-    const columnHeaders = [];
-
-    // eslint-disable-next-line func-names
-    table('th').each(function (i) {
-      columnHeaders[i] = table(this).text();
-    });
+    const columnHeaders = this.getColumnHeaders(table);
 
     /* eslint-disable prefer-arrow-callback, implicit-arrow-linebreak, func-names */
     table('tr').each(function (i, elem) {
@@ -41,9 +36,8 @@ class HTMLParser {
       .filter((v) => v.length !== 0)
       .map(
         (rowData) => {
-          if (columnHeaders.length === 0) {
-            return this.convertTableToObject(rowData);
-          }
+          if (!columnHeaders) return this.convertTableToObject(rowData);
+
           return this.convertTableToObject(rowData, columnHeaders);
         }
 
@@ -51,6 +45,18 @@ class HTMLParser {
       );
     /* eslint-enable prefer-arrow-callback, implicit-arrow-linebreak, func-names */
     return rowObjects;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getColumnHeaders(table) {
+    const columnHeaders = [];
+
+    // eslint-disable-next-line func-names
+    table('th').each(function (i) {
+      columnHeaders[i] = table(this).text();
+    });
+
+    return columnHeaders.length === 0 ? null : columnHeaders;
   }
 
   // eslint-disable-next-line class-methods-use-this
