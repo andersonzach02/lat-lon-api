@@ -76,6 +76,14 @@ class HTMLParser {
       {}
     );
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  changePropertyName(object, existingPropertyName, newPropertyName) {
+    // eslint-disable-next-line no-param-reassign
+    object[newPropertyName] = object[existingPropertyName];
+    // eslint-disable-next-line no-param-reassign
+    delete object['Place Name'];
+  }
 }
 
 module.exports = HTMLParser;

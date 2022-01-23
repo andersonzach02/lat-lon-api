@@ -10,8 +10,8 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "test": "jest",
-	"unit": "jest Unit",
-	"integration": "jest Integration",
+    "unit": "jest Unit",
+    "integration": "jest Integration",
     "lint": "eslint --fix src test utils"
   },
   "repository": {
